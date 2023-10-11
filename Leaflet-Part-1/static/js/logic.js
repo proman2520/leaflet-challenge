@@ -15,15 +15,56 @@ function createFeatures(earthquakeData) {
     layer.bindPopup(`<h3>${feature.properties.place}</h3><hr><p>${new Date(feature.properties.time)}</p>`);
     }
 
+    function createCircleMarker(feature, coord) {
+      let options = {
+        radius: feature.properties.mag*5,
+        fillOpacity: 0.75,
+        fillColor: colorCircle(feature.geometry.coordinates[2]),
+        color: "black"
+      }
+      return L.circleMarker(coord, options)
+    }
+
     // Create a GeoJSON layer that contains the features array on the earthquakeData object.
     // Run the onEachFeature function once for each piece of data in the array.
     let earthquakes = L.geoJSON(earthquakeData, {
-    onEachFeature: onEachFeature
+      onEachFeature: onEachFeature,
+      pointToLayer: createCircleMarker
     });
 
     // Send our earthquakes layer to the createMap function/
     createMap(earthquakes);
 }
+
+function colorCircle(depth) {
+  if (depth > 90) {
+      return "red"
+  } else if (depth >= 70) {
+      return "orangered"
+  } else if (depth >= 50) {
+      return "orange"
+  } else if (depth >= 30) {
+      return "yellow"
+  } else if (depth >= 10) {
+      return "yellowgreen"
+  } else {
+      return "green"
+  }
+}
+
+// Create a legend to display information about our map.
+let info = L.control({
+  position: "bottomright"
+});
+
+// When the layer control is added, insert a div with the class of "legend".
+info.onAdd = function() {
+  let div = L.DomUtil.create("div", "legend");
+  return div;
+};
+
+// Add the info legend to the map.
+info.addTo(map);
 
 function createMap(earthquakes) {
 
@@ -63,4 +104,4 @@ function createMap(earthquakes) {
       collapsed: false
     }).addTo(myMap);
   
-  }
+}
