@@ -12,7 +12,8 @@ function createFeatures(earthquakeData) {
     // Define a function that we want to run once for each feature in the features array.
     // Give each feature a popup that describes the place and time of the earthquake.
     function onEachFeature(feature, layer) {
-    layer.bindPopup(`<h3>${feature.properties.place}</h3><hr><p>${new Date(feature.properties.time)}</p>`);
+    layer.bindPopup(`<h3>${feature.properties.place}</h3><hr><p>${new Date(feature.properties.time)}</p><hr> \
+                    <p>Magnitude: ${feature.properties.mag}<br>Depth: ${feature.geometry.coordinates[2]}</p>`);
     }
 
     function createCircleMarker(feature, coord) {
@@ -51,20 +52,6 @@ function colorCircle(depth) {
       return "green"
   }
 }
-
-// Create a legend to display information about our map.
-let info = L.control({
-  position: "bottomright"
-});
-
-// When the layer control is added, insert a div with the class of "legend".
-info.onAdd = function() {
-  let div = L.DomUtil.create("div", "legend");
-  return div;
-};
-
-// Add the info legend to the map.
-info.addTo(map);
 
 function createMap(earthquakes) {
 
@@ -105,3 +92,29 @@ function createMap(earthquakes) {
     }).addTo(myMap);
   
 }
+
+// Create a control for our layers, and add our overlays to it.
+L.control.layers(null, overlays).addTo(myMap);
+
+// Create a legend to display information about our map.
+let legend = L.control({
+  position: "bottomright"
+});
+
+// When the layer control is added, insert a div with the class of "legend".
+legend.onAdd = function() {
+  let div = L.DomUtil.create("div", "legend");
+
+  let grades = [-10, 10, 30, 50, 70, 90];
+  let colors = ["green", "yellowgreen", "yellow", "orange", "orangered", "red"];
+
+  //Assistance
+  for (let i = 0; i < grades.length; i++) {
+    div.innerHTML += "<i style='background: " + colors[i] + "'></i> "
+      + grades[i] + (grades[i + 1] ? "&ndash;" + grades[i + 1] + "<br>" : "+");
+  }
+  return div;
+};
+
+// Add the info legend to the map.
+legend.addTo(myMap);
