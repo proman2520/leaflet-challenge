@@ -23,7 +23,9 @@ function createFeatures(earthquakeData) {
         fillColor: colorCircle(feature.geometry.coordinates[2]),
         color: "black"
       }
-      return L.circleMarker(coord, options)
+      console.log("Depth: " + feature.geometry.coordinates[2]);
+      console.log("Color: " + colorCircle(feature.geometry.coordinates[2]));
+      return L.circleMarker(coord, options);
     }
 
     // Create a GeoJSON layer that contains the features array on the earthquakeData object.
@@ -101,11 +103,11 @@ function createMap(earthquakes) {
       let div = L.DomUtil.create("div", "legend");
 
       let grades = [-10, 10, 30, 50, 70, 90];
-      let colors = ["green", "yellowgreen", "yellow", "orange", "orangered", "red"];
+      let colors = ["green", "yellowgreen", "yellow", "orange", "orangered","red"]
 
       //Assistance
       for (let i = 0; i < grades.length; i++) {
-        div.innerHTML += "<i style='background: " + colors[i] + "'></i> "
+        div.innerHTML += "<i style='background: " + colors[i] + "'>&nbsp;</i> "
           + grades[i] + (grades[i + 1] ? "&ndash;" + grades[i + 1] + "<br>" : "+");
       }
       return div;
