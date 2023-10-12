@@ -1,5 +1,5 @@
 // All 4.5+ earthquakes from the past 30 days
-let queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_month.geojson"
+let queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_month.geojson"
 
 // Perform a GET request to the query URL/
 d3.json(queryUrl).then(function (data) {
@@ -18,7 +18,7 @@ function createFeatures(earthquakeData) {
 
     function createCircleMarker(feature, coord) {
       let options = {
-        radius: feature.properties.mag*5,
+        radius: feature.properties.mag**2,
         fillOpacity: 0.75,
         fillColor: colorCircle(feature.geometry.coordinates[2]),
         color: "black"
