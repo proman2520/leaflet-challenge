@@ -16,9 +16,17 @@ function createFeatures(earthquakeData) {
                     <p>Magnitude: ${feature.properties.mag}<br>Depth: ${feature.geometry.coordinates[2]}</p>`);
     }
 
+    function setRadius(feature) {
+      if (feature.properties.mag == 0) {
+        return 1;
+      } else {
+        return feature.properties.mag*4
+      }
+    }
+
     function createCircleMarker(feature, coord) {
       let options = {
-        radius: feature.properties.mag**2,
+        radius: setRadius(feature),
         fillOpacity: 0.75,
         fillColor: colorCircle(feature.geometry.coordinates[2]),
         color: "black"
